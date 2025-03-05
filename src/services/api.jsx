@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 const API_URL = "https://nw678sfec9.execute-api.ap-south-1.amazonaws.com/dev";
 
@@ -11,7 +11,7 @@ export const useGetTasks = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const callGetApi = async () => {
+  const callGetApi = useCallback(async () => {
     setIsLoading(true);
     const raw = JSON.stringify({ method: "GET" });
 
@@ -35,10 +35,11 @@ export const useGetTasks = () => {
       console.log(JSON.parse(json.body));
     } catch (error) {
       console.error(error.message);
+      setError(error);
     } finally {
       setIsLoading(false);
     }
-  };
+  },[]);
 
   return { getResponse, isLoading, error, callGetApi };
 };
@@ -78,7 +79,7 @@ export const useAddTask = (task) => {
     }
   };
 
-  return { addTaskResponse, callPostApi };
+  return { addTaskResponse, addTaskError, callPostApi };
 };
 
 export const useUpdateTask = (task) => {
@@ -116,7 +117,7 @@ export const useUpdateTask = (task) => {
       }
     };
   
-    return { updateTaskResponse, callPutApi };
+    return { updateTaskResponse, callPutApi, updateTaskError };
   };
 
 
@@ -153,6 +154,6 @@ export const useUpdateTask = (task) => {
       }
     };
   
-    return { deleteTaskResponse, callDeleteApi };
+    return { deleteTaskResponse, callDeleteApi, deleteTaskError };
   };
   
