@@ -17,17 +17,15 @@ export default function Home() {
   const { updateTaskResponse, callPutApi } = useUpdateTask();
   const { deleteTaskResponse, callDeleteApi} = useDeleteTask();
   const { isModalVisible, setModalVisibility } = useContext(GlobalContext);
-  const [tasks, setTask] = useState([]);
   const [taskToUpdate, setTaskToUpdate] = useState("");
   const [mode, setMode] = useState("");
 
+
+
   useEffect(() => {
     callGetApi();
-  }, [addTaskResponse, updateTaskResponse, deleteTaskResponse]);
+  }, [addTaskResponse, updateTaskResponse, deleteTaskResponse, callGetApi]);
 
-  const generate3DigitRandomNumber = () => {
-    return Math.floor(Math.random() * (999 - 100 + 1) + 100);
-  };
 
   const openTaskModal = (mode, itemToUpdate = undefined) => {
     setMode(mode);
